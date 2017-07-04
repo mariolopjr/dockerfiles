@@ -4,16 +4,15 @@ FROM alpine:3.6
 ENV PATH=/usr/local/bin:$PATH LANG=C.UTF-8 LANGUAGE=C.UTF-8 LC_ALL=C.UTF-8 TIMEZONE=America/New_York
 
 # Set Node version
-ENV NODE_VERSION v8.1.3 NODE_PREFIX /usr/local
+ENV NODE_VERSION=v8.1.3 NODE_PREFIX=/usr/local
 
 # install ca-certificates so that HTTPS works consistently
-# the other runtime dependencies for Python are installed later
+# and other required deps
 RUN apk update \
 	&& apk add --no-cache ca-certificates libgcc libstdc++ \
 	&& update-ca-certificates
 
 RUN set -ex \
-
 	# Set up deps
 	&& apk add --no-cache --virtual .build-deps  \
 		g++ \
@@ -66,7 +65,6 @@ RUN set -ex \
         gulp-cli \
         grunt-cli \
         bower \
-        markdown-styles \
         yarn
 
 CMD ["/usr/local/bin/gulp"]
