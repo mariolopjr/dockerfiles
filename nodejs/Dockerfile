@@ -57,6 +57,11 @@ RUN set -ex \
     && make install \
     && paxctl -cm ${NODE_PREFIX}/bin/node \
     && rm -rf /usr/src/node \
+        /tmp/* \
+        ${NODE_PREFIX}/lib/node_modules/npm/man \
+        ${NODE_PREFIX}/lib/node_modules/npm/doc \
+        ${NODE_PREFIX}/lib/node_modules/npm/html \
+    && find ${NODE_PREFIX}/lib/node_modules/npm -name test -o -name .bin -type d | xargs rm -rf \
     && apk del .build-deps
 
 RUN set -ex \
@@ -66,5 +71,8 @@ RUN set -ex \
         grunt-cli \
         bower \
         yarn
+
+VOLUME /src
+WORKDIR /src
 
 CMD ["/usr/local/bin/gulp"]
