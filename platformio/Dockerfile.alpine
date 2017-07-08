@@ -1,0 +1,17 @@
+FROM python:2.7-alpine3.6
+
+ENV PLATFORMIOVER=3.4.0
+
+RUN apk update \
+    && apk add --no-cache --virtual .install-deps \
+      git \
+    && pip install platformio==$PLATFORMIOVER \
+    && platformio platform install espressif8266 \
+    && platformio platform install teensy \
+    && apk del .install-deps \
+    && platformio settings set enable_telemetry No || 0
+
+RUN addgroup -S pio && adduser -S -g pio pio
+
+USER pio
+
